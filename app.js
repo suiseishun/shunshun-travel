@@ -403,12 +403,18 @@ import { initAuthUI, requireLogin } from './auth.js';
     $('#overlay').addEventListener('click',e=>{ if(e.target===$('#overlay')) closeModal(); });
     $('#saveModal').addEventListener('click',saveModal);
     function tryAutoPin(){
-       const coords = extractLatLng($('#f-map').value);
-       if(!coords) return;
-       if(!pickMap) initPickMap();
-       setPick(coords.lat, coords.lng);
-       setTimeout(()=>{ pickMap.invalidateSize(); pickMap.setView([coords.lat, coords.lng], 10); }, 130);
-    }
+     const url = $('#f-map').value;
+     if(!url) return;
+     let coords = null;
+     let m = url.match(/@([-\d.]+),([-\d.]+)[,z\/m]/);
+     if(m) coords = { lat:parseFloat(m[1]), lng:parseFloat(m[2]) };
+     if(!coords){ m = url.match(/[?&]q=([-\d.]+),([-\d.]+)/); if(m) coords = { lat:parseFloat(m[1]), lng:parseFloat(m[2]) }; }
+     if(!coords){ m = url.match(/[?&]ll=([-\d.]+),([-\d.]+)/); if(m) coords = { lat:parseFloat(m[1]), lng:parseFloat(m[2]) }; }
+     if(!coords) return;
+     if(!pickMap) initPickMap();
+     setPick(coords.lat, coords.lng);
+     setTimeout(()=>{ pickMap.invalidateSize(); pickMap.setView([coords.lat, coords.lng], 10); }, 130);
+   }
     $('#f-map').addEventListener('change', tryAutoPin);
     $('#f-map').addEventListener('paste', ()=>setTimeout(tryAutoPin, 60));
     document.addEventListener('keydown',e=>{
