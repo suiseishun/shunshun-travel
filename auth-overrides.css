@@ -1,0 +1,32 @@
+/* ============================================================
+   Auth UI overrides
+   - ログインボタン
+   - 未ログイン時は編集系UIを非表示
+   ============================================================ */
+
+/* ヘッダのログイン/ログアウトボタン */
+.auth-btn{
+  display:inline-flex; align-items:center; gap:6px;
+  font-family:var(--body); font-weight:600; font-size:12px;
+  letter-spacing:.5px;
+  padding:9px 16px;
+  border:1px solid var(--line-2);
+  background:transparent;
+  color:var(--ink-soft);
+  border-radius:999px;
+  cursor:pointer;
+  transition:background .2s ease, color .2s ease, border-color .2s ease;
+  margin-right:10px;
+}
+.auth-btn:hover{
+  background:var(--ink); color:#fff; border-color:var(--ink);
+}
+
+/* 編集系UIは未ログイン時に隠す */
+.owner-only{ display:none !important; }
+body.logged-in .owner-only{ display:inline-flex !important; }
+body.logged-in .card-tools.owner-only{ display:flex !important; }
+body.logged-in .avatar .change.owner-only{ display:block !important; }
+
+/* 「場所を追加」ボタンは元コードでは display:inline-flex なので合わせる */
+body.logged-in .add-btn.owner-only{ display:inline-flex !important; }

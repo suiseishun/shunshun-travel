@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shunshun Travel — 旅の記録</title>
+<meta name="description" content="shunshunが訪れた国内・海外の観光名所、食事、宿の記録">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Space+Grotesk:wght@400;500;600;700&family=Shippori+Mincho:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="auth-overrides.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap bar">
+    <a class="brand" href="#top">
+      <span class="mark">Shun<em>shun</em></span>
+      <span class="sub">Travel Journal</span>
+    </a>
+    <nav class="main">
+      <a href="#regions">Regions</a>
+      <a href="#spots" class="active">Spots</a>
+      <a href="#about">About</a>
+    </nav>
+    <button class="add-btn owner-only" id="openAdd">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      場所を追加
+    </button>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero wrap">
+    <div class="hero-grid">
+      <div class="hero-left load-seq">
+        <div class="label"><span class="star">✦</span> Shunshun's Travel Journal — since 2024</div>
+        <h1 class="hero-title">Travel<br><em>enriches</em> life</h1>
+        <p class="hero-jp">これまでに歩いた国内・海外の景色、出会った食事、泊まった宿。お気に入りの場所を、写真とひとことの感想で残しています。</p>
+        <div class="stats" id="stats">
+          <div class="stat"><span class="num"><span data-stat="countries">0</span></span><div class="cap">Countries 国</div></div>
+          <div class="stat"><span class="num"><span data-stat="prefs">0</span></span><div class="cap">都道府県</div></div>
+          <div class="stat"><span class="num"><span data-stat="spots">0</span></span><div class="cap">Places 場所</div></div>
+        </div>
+        <div class="hero-cta">
+          <a class="btn-line" href="#spots">旅の記録を見る →</a>
+        </div>
+      </div>
+
+      <div class="hero-map" id="heroMap">
+        <div id="leafletMap"></div>
+        <div class="map-overlay"><b>Visited map</b>ピンをクリックで絞り込み</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ REGIONS ============ -->
+  <section class="sec wrap" id="regions">
+    <div class="sec-head reveal">
+      <div>
+        <h2>Explore by Region</h2>
+        <div class="jp">地域から探す</div>
+      </div>
+    </div>
+    <div class="region-grid" id="regionGrid"></div>
+  </section>
+
+  <!-- ============ SPOTS ============ -->
+  <section class="sec wrap" id="spots">
+    <div class="sec-head reveal">
+      <div>
+        <h2>Recent Journeys</h2>
+        <div class="jp">最近の旅（新しい順）</div>
+      </div>
+      <div class="right">
+        <div class="filters">
+          <div class="seg" id="areaSeg">
+            <button data-area="all" class="active">すべて</button>
+            <button data-area="国内">国内</button>
+            <button data-area="海外">海外</button>
+          </div>
+          <select class="select" id="catSel">
+            <option value="all">全カテゴリ</option>
+            <option value="観光">観光名所</option>
+            <option value="食事">食事</option>
+            <option value="宿">宿</option>
+          </select>
+          <select class="select" id="sortSel">
+            <option value="new">新しい順</option>
+            <option value="old">古い順</option>
+            <option value="rating">評価が高い順</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="place-grid" id="placeGrid"></div>
+  </section>
+
+  <!-- ============ ABOUT / PROFILE ============ -->
+  <section class="profile" id="about">
+    <div class="wrap profile-grid reveal">
+      <div class="avatar"><div class="slot" data-slot="avatar"></div></div>
+      <div>
+        <h3 class="pname2">Shunshun</h3>
+        <div class="ptitle">Student · 学生</div>
+        <p class="pbio">旅行とラーメンが好きな学生です。長期休みのたびに国内外を歩き回って、良かった景色・食事・宿をこのサイトに記録しています。次に旅する人の参考になればうれしいです。</p>
+        <div class="quote">“ラーメンを食べに、世界を歩く。”</div>
+      </div>
+      <div class="ministats">
+        <div class="ministat"><div class="n" data-stat="countries">0</div><div class="c">国</div></div>
+        <div class="ministat"><div class="n" data-stat="prefs">0</div><div class="c">都道府県</div></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="starfield"></div>
+  <div class="wrap row">
+    <span class="fmark">Shunshun Travel <span class="star">✦</span></span>
+    <nav>
+      <a href="#regions">Regions</a>
+      <a href="#spots">Spots</a>
+      <a href="#about">About</a>
+    </nav>
+    <small>© 2024–2026 shunshun · 旅の記録</small>
+  </div>
+</footer>
+
+<!-- ============ ADD / EDIT MODAL ============ -->
+<div class="overlay" id="overlay">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <h3 id="modalTitle">場所を追加</h3>
+      <button class="x" id="closeModal" aria-label="閉じる">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="field">
+        <label>写真（複数枚OK）</label>
+        <div class="photo-manager">
+          <div class="photo-drop" id="photoDrop">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M12 3v13M7 8l5-5 5 5"/></svg>
+            <span>写真をドロップ、またはクリックで追加<br><i>何枚でも。1枚目がカバー写真になります</i></span>
+          </div>
+          <div class="thumbs" id="formThumbs"></div>
+        </div>
+      </div>
+      <div class="field">
+        <label>場所・お店の名前</label>
+        <input type="text" id="f-name" placeholder="例：アマルフィ海岸 / 一双 博多本店">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>区分</label>
+          <select id="f-area"><option value="国内">国内</option><option value="海外">海外</option></select>
+        </div>
+        <div class="field">
+          <label>地域（都道府県・国）</label>
+          <input type="text" id="f-region" placeholder="例：福岡 / イタリア">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>カテゴリ</label>
+          <select id="f-cat"><option value="観光">観光名所</option><option value="食事">食事</option><option value="宿">宿</option></select>
+        </div>
+        <div class="field">
+          <label>訪問した月</label>
+          <input type="month" id="f-date">
+        </div>
+      </div>
+      <div class="field">
+        <label>評価</label>
+        <div class="rating-input" id="f-rating">
+          <button data-v="1">★</button><button data-v="2">★</button><button data-v="3">★</button><button data-v="4">★</button><button data-v="5">★</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>感想・コメント</label>
+        <textarea id="f-comment" rows="3" placeholder="どんな場所だった？ ひとことでも。"></textarea>
+      </div>
+      <div class="field">
+        <label>Google マップ URL</label>
+        <input type="url" id="f-map" placeholder="https://maps.google.com/...">
+      </div>
+      <div class="field">
+        <label>公式サイト URL</label>
+        <input type="url" id="f-site" placeholder="https://...">
+      </div>
+      <div class="field">
+        <label>地図上の位置 <span id="pickHint" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--ink-faint);">— 地図をクリックして指定</span></label>
+        <div class="pick-map" id="pickMap"></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-ghost" id="cancelModal">キャンセル</button>
+      <button class="btn-solid" id="saveModal">保存する</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ LIGHTBOX ============ -->
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" id="lbClose" aria-label="閉じる">×</button>
+  <button class="lb-nav prev" id="lbPrev" aria-label="前へ">‹</button>
+  <figure class="lb-stage">
+    <img id="lbImg" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="">
+    <figcaption id="lbCap"></figcaption>
+  </figure>
+  <button class="lb-nav next" id="lbNext" aria-label="次へ">›</button>
+  <div class="lb-strip" id="lbStrip"></div>
+</div>
+
+<div class="save-note" id="saveNote">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+  <span id="saveNoteText">保存しました</span>
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

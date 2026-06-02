@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>地域から探す — Shunshun Travel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Space+Grotesk:wght@400;500;600;700&family=Shippori+Mincho:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="auth-overrides.css">
+<style>
+  /* region-page-only additions (shares all tokens & look from styles.css) */
+  .back-link{display:inline-flex; align-items:center; gap:7px; white-space:nowrap; font-family:var(--body); font-weight:600; font-size:13px; letter-spacing:.5px; color:var(--ink-soft); text-decoration:none; margin-bottom:18px; transition:color .3s ease, gap .3s ease;}
+  .back-link:hover{color:var(--terra); gap:11px;}
+  .region-page-head{padding-bottom:6px;}
+  .region-page-head .hero-title{font-size:60px; margin:6px 0 10px;}
+  .region-page-head .hero-jp{margin:0; max-width:50ch;}
+  .page-stats{display:flex; gap:26px; margin-top:22px;}
+  .page-stats .ps{display:flex; align-items:baseline; gap:8px; white-space:nowrap;}
+  .page-stats .ps .n{font-family:var(--display); font-weight:600; font-size:34px; line-height:1; background:linear-gradient(135deg, var(--aqua) 0%, var(--terra) 45%, var(--teal) 100%); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
+  .page-stats .ps .c{font-family:var(--body); font-weight:700; font-size:10.5px; letter-spacing:2px; text-transform:uppercase; color:var(--ink-faint); white-space:nowrap;}
+
+  .region-group{margin-top:46px;}
+  .group-head{display:flex; align-items:flex-end; gap:14px; margin-bottom:22px;}
+  .group-head .marker{width:14px; height:14px; flex:none; border-radius:50% 50% 50% 0; transform:rotate(-45deg); background:var(--terra); box-shadow:0 2px 5px rgba(0,0,0,.2); margin-bottom:6px;}
+  .group-head .gname{font-family:var(--display); font-weight:600; font-size:36px; line-height:1; margin:0;}
+  .group-head .gname .jp{font-family:var(--serif); font-size:16px; color:var(--ink-soft); margin-left:8px;}
+  .group-head .gcount{font-family:var(--body); font-weight:700; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--ink-faint); white-space:nowrap;}
+  .group-head .gline{flex:1; height:0; border-top:1.5px dashed var(--line-2); margin-bottom:8px;}
+  body.view-海外 .group-head .marker{background:var(--teal);}
+  body.view-食事 .group-head .marker{background:var(--gold);}
+  .place .photo .slot{cursor:zoom-in;}
+  .place .photo .slot .empty{cursor:default;}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap bar">
+    <a class="brand" href="Shunshun%20Travel.html#top">
+      <span class="mark">Shun<em>shun</em></span>
+      <span class="sub">Travel Journal</span>
+    </a>
+    <nav class="main">
+      <a href="Shunshun%20Travel.html#regions" class="active">Regions</a>
+      <a href="Shunshun%20Travel.html#spots">Spots</a>
+      <a href="Shunshun%20Travel.html#about">About</a>
+    </nav>
+    <a class="add-btn owner-only" href="Shunshun%20Travel.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      場所を追加
+    </a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="sec wrap" style="padding-top:42px;">
+    <a class="back-link" href="Shunshun%20Travel.html#regions">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      Regions へ戻る
+    </a>
+    <div class="region-page-head load-seq">
+      <div class="label"><span class="star">✦</span> Explore by Region</div>
+      <h1 class="hero-title" id="pageTitle">Japan</h1>
+      <p class="hero-jp" id="pageSub">国内で訪れた場所を、県ごとにまとめています。</p>
+      <div class="page-stats" id="pageStats"></div>
+    </div>
+  </section>
+
+  <section class="wrap" id="groups" style="padding-bottom:30px;"></section>
+</main>
+
+<footer class="site">
+  <div class="starfield"></div>
+  <div class="wrap row">
+    <span class="fmark">Shunshun Travel <span class="star">✦</span></span>
+    <nav>
+      <a href="Shunshun%20Travel.html#regions">Regions</a>
+      <a href="Shunshun%20Travel.html#spots">Spots</a>
+      <a href="Shunshun%20Travel.html#about">About</a>
+    </nav>
+    <small>© 2024–2026 shunshun · 旅の記録</small>
+  </div>
+</footer>
+
+<!-- ============ LIGHTBOX ============ -->
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" id="lbClose" aria-label="閉じる">×</button>
+  <button class="lb-nav prev" id="lbPrev" aria-label="前へ">‹</button>
+  <button class="lb-nav next" id="lbNext" aria-label="次へ">›</button>
+  <figure class="lb-stage">
+    <img id="lbImg" src="" alt="">
+    <figcaption id="lbCap"></figcaption>
+  </figure>
+  <div class="lb-strip" id="lbStrip"></div>
+</div>
+
+<script type="module" src="region.js"></script>
+</body>
+</html>
