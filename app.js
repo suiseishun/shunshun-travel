@@ -387,16 +387,15 @@ import { initAuthUI, requireLogin } from './auth.js';
     $('#cancelModal').addEventListener('click',closeModal);
     $('#overlay').addEventListener('click',e=>{ if(e.target===$('#overlay')) closeModal(); });
     $('#saveModal').addEventListener('click',saveModal);
-   // GoogleマップURLを入力・貼り付けしたら自動でピンを設定
-      function tryAutoPin(){
-        const coords = extractLatLng($('#f-map').value);
-        if(!coords) return;
-        if(!pickMap) initPickMap();
-        setPick(coords.lat, coords.lng);
-        setTimeout(()=>{ pickMap.invalidateSize(); pickMap.setView([coords.lat, coords.lng], 10); }, 130);
-      }
-      $('#f-map').addEventListener('change', tryAutoPin);
-      $('#f-map').addEventListener('paste', ()=>setTimeout(tryAutoPin, 60));
+    function tryAutoPin(){
+       const coords = extractLatLng($('#f-map').value);
+       if(!coords) return;
+       if(!pickMap) initPickMap();
+       setPick(coords.lat, coords.lng);
+       setTimeout(()=>{ pickMap.invalidateSize(); pickMap.setView([coords.lat, coords.lng], 10); }, 130);
+    }
+    $('#f-map').addEventListener('change', tryAutoPin);
+    $('#f-map').addEventListener('paste', ()=>setTimeout(tryAutoPin, 60));
     document.addEventListener('keydown',e=>{
       if(e.key==='Escape'){ closeModal(); closeLb(); }
       if($('#lightbox').classList.contains('open')){ if(e.key==='ArrowLeft') lbStep(-1); if(e.key==='ArrowRight') lbStep(1); }
