@@ -439,7 +439,7 @@ import { initAuthUI, requireLogin } from './auth.js';
     function extractLatLng(url){
         if(!url) return null;
         // 例: https://www.google.com/maps/place/.../@35.123,139.456,17z
-        let m = url.match(/@([-\d.]+),([-\d.]+)[,z/]/);
+        let m = url.match(/@([-\d.]+),([-\d.]+)[,z/m]/);
         if(m) return { lat:parseFloat(m[1]), lng:parseFloat(m[2]) };
         // 例: https://www.google.com/maps?q=35.123,139.456
         m = url.match(/[?&]q=([-\d.]+),([-\d.]+)/);
