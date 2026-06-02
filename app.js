@@ -381,6 +381,21 @@ import { initAuthUI, requireLogin } from './auth.js';
   /* ============================================================
      INIT
      ============================================================ */
+
+   function extractLatLng(url){
+        if(!url) return null;
+        // 例: https://www.google.com/maps/place/.../@35.123,139.456,17z
+        let m = url.match(/@([-\d.]+),([-\d.]+)[,z/m]/);
+        if(m) return { lat:parseFloat(m[1]), lng:parseFloat(m[2]) };
+        // 例: https://www.google.com/maps?q=35.123,139.456
+        m = url.match(/[?&]q=([-\d.]+),([-\d.]+)/);
+        if(m) return { lat:parseFloat(m[1]), lng:parseFloat(m[2]) };
+        // 例: https://www.google.com/maps?ll=35.123,139.456
+        m = url.match(/[?&]ll=([-\d.]+),([-\d.]+)/);
+        if(m) return { lat:parseFloat(m[1]), lng:parseFloat(m[2]) };
+        return null;
+      } 
+   
   function wireUI(){
     $('#openAdd').addEventListener('click',()=>{ if(requireLogin()) openModal(null); });
     $('#closeModal').addEventListener('click',closeModal);
@@ -436,19 +451,6 @@ import { initAuthUI, requireLogin } from './auth.js';
 
   async function init(){
     await initAuthUI();
-    function extractLatLng(url){
-        if(!url) return null;
-        // 例: https://www.google.com/maps/place/.../@35.123,139.456,17z
-        let m = url.match(/@([-\d.]+),([-\d.]+)[,z/m]/);
-        if(m) return { lat:parseFloat(m[1]), lng:parseFloat(m[2]) };
-        // 例: https://www.google.com/maps?q=35.123,139.456
-        m = url.match(/[?&]q=([-\d.]+),([-\d.]+)/);
-        if(m) return { lat:parseFloat(m[1]), lng:parseFloat(m[2]) };
-        // 例: https://www.google.com/maps?ll=35.123,139.456
-        m = url.match(/[?&]ll=([-\d.]+),([-\d.]+)/);
-        if(m) return { lat:parseFloat(m[1]), lng:parseFloat(m[2]) };
-        return null;
-      } 
     wireUI();
     if(window.L) initHeroMap();
     initAvatar();
