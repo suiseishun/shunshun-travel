@@ -387,6 +387,16 @@ import { initAuthUI, requireLogin } from './auth.js';
     $('#cancelModal').addEventListener('click',closeModal);
     $('#overlay').addEventListener('click',e=>{ if(e.target===$('#overlay')) closeModal(); });
     $('#saveModal').addEventListener('click',saveModal);
+   // GoogleマップURLを入力・貼り付けしたら自動でピンを設定
+      function tryAutoPin(){
+        const coords = extractLatLng($('#f-map').value);
+        if(!coords) return;
+        if(!pickMap) initPickMap();
+        setPick(coords.lat, coords.lng);
+        setTimeout(()=>{ pickMap.invalidateSize(); pickMap.setView([coords.lat, coords.lng], 10); }, 130);
+      }
+      $('#f-map').addEventListener('change', tryAutoPin);
+      $('#f-map').addEventListener('paste', ()=>setTimeout(tryAutoPin, 60));
     document.addEventListener('keydown',e=>{
       if(e.key==='Escape'){ closeModal(); closeLb(); }
       if($('#lightbox').classList.contains('open')){ if(e.key==='ArrowLeft') lbStep(-1); if(e.key==='ArrowRight') lbStep(1); }
@@ -427,6 +437,19 @@ import { initAuthUI, requireLogin } from './auth.js';
 
   async function init(){
     await initAuthUI();
+    function extractLatLng(url){
+        if(!url) return null;
+        // 例: https://www.google.com/maps/place/.../@35.123,139.456,17z
+        let m = url.match(/@([-\d.]+),([-\d.]+)[,z/]/);
+        if(m) return { lat:parseFloat(m[1]), lng:parseFloat(m[2]) };
+        // 例: https://www.google.com/maps?q=35.123,139.456
+        m = url.match(/[?&]q=([-\d.]+),([-\d.]+)/);
+        if(m) return { lat:parseFloat(m[1]), lng:parseFloat(m[2]) };
+        // 例: https://www.google.com/maps?ll=35.123,139.456
+        m = url.match(/[?&]ll=([-\d.]+),([-\d.]+)/);
+        if(m) return { lat:parseFloat(m[1]), lng:parseFloat(m[2]) };
+        return null;
+      } 
     wireUI();
     if(window.L) initHeroMap();
     initAvatar();
