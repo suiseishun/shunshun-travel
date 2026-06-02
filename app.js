@@ -50,7 +50,7 @@ import { initAuthUI, requireLogin } from './auth.js';
      ============================================================ */
   function computeStats(){
     const prefs=new Set(), countries=new Set();
-    places.forEach(p=>{ if(p.area==='海外') countries.add(p.region); else prefs.add(p.region); });
+    places.forEach(p=>{ if(p.area==='海外') countries.add(p.region.split('/')[0].trim()); else prefs.add(p.region.split('/')[0].trim()); });
     return { countries:countries.size, prefs:prefs.size, spots:places.length };
   }
   function renderStats(){
@@ -113,7 +113,7 @@ import { initAuthUI, requireLogin } from './auth.js';
     const grid=$('#regionGrid');
     grid.innerHTML=REGIONS.map(r=>{
       const subset = r.key==='食事' ? places.filter(p=>p.cat==='食事') : places.filter(p=>p.area===r.key);
-      const regs=[...new Set(subset.map(p=>p.region))];
+       const regs=[...new Set(subset.map(p=>p.region.split('/')[0].trim()))];
       const shown=regs.slice(0,3), more=regs.length-shown.length;
       const chips=shown.map(c=>`<span class="chip">${esc(c)}</span>`).join('')+(more>0?`<span class="chip terra">+${more}</span>`:'');
       return `<a class="region reveal acc-${r.key}" href="region.html?view=${encodeURIComponent(r.key)}" data-region-filter="${r.key}">
