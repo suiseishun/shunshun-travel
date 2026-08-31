@@ -72,8 +72,11 @@ import { initAuthUI, requireLogin } from './auth.js';
   }
   function initHeroMap(){
     heroMap = L.map('leafletMap', { scrollWheelZoom:false, zoomControl:true, attributionControl:true });
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution:'&copy; OpenStreetMap contributors', subdomains:'abc', maxZoom:19
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+      attribution:'&copy; Esri &mdash; Esri, DeLorme, NAVTEQ', maxZoom:16
+    }).addTo(heroMap);
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}', {
+      maxZoom:16
     }).addTo(heroMap);
     heroLayer = L.layerGroup().addTo(heroMap);
     renderMarkers();
@@ -260,7 +263,8 @@ import { initAuthUI, requireLogin } from './auth.js';
 
   function initPickMap(){
     pickMap=L.map('pickMap',{scrollWheelZoom:false, zoomControl:true});
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap contributors', subdomains:'abc', maxZoom:19}).addTo(pickMap);
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',{attribution:'&copy; Esri &mdash; Esri, DeLorme, NAVTEQ', maxZoom:16}).addTo(pickMap);
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}',{maxZoom:16}).addTo(pickMap);
     pickMap.on('click', e=>{ setPick(e.latlng.lat, e.latlng.lng); });
   }
   function setPick(lat,lng){
