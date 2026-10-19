@@ -9,8 +9,8 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
 /* ▼▼▼ ここを書き換え ▼▼▼ */
-const SUPABASE_URL      = 'https://dakxikkpcgrcpzylrptc.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRha3hpa2twY2dyY3B6eWxycHRjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzNzM0MzAsImV4cCI6MjA5NTk0OTQzMH0.GsU7SL2pCU0_6H5HCrvprObekSgE8WxixZg1RemOlyU';
+const SUPABASE_URL      = 'https://zqiiilxnrutvurwxowma.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpxaWlpbHhucnV0dnVyd3hvd21hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgxODgyNzIsImV4cCI6MjEwMzc2NDI3Mn0.3UqJ6ZjhaAtxFY5GwyF8s3PGrFzrNoKeYC7kT_GhGIk';
 /* ▲▲▲ ここを書き換え ▲▲▲ */
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
