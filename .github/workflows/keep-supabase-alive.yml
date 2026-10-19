@@ -1,0 +1,18 @@
+name: Keep Supabase alive
+
+# Supabase の無料プランは一定期間アクセスがないと自動で一時停止されるため、
+# 数日おきに places テーブルへ軽いクエリを送って停止を防ぐ。
+on:
+  schedule:
+    - cron: '0 3 */3 * *'   # 3日おき 03:00 UTC
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Query places table
+        run: |
+          curl -fsS "https://zqiiilxnrutvurwxowma.supabase.co/rest/v1/places?select=id&limit=1" \
+            -H "apikey: ${{ vars.SUPABASE_ANON_KEY }}" \
+            -H "Authorization: Bearer ${{ vars.SUPABASE_ANON_KEY }}"
